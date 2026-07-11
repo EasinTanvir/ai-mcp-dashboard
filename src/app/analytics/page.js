@@ -1,1 +1,9 @@
-import DashboardShell from '@/components/layout/DashboardShell'; import AnalyticsView from '@/components/pages/AnalyticsView'; export default function Page(){return <DashboardShell active="Analytics"><AnalyticsView/></DashboardShell>}
+import DashboardShell from "@/components/layout/DashboardShell";
+import AnalyticsView from "@/components/pages/AnalyticsView";
+export default function Page() {
+  return (
+    <DashboardShell active="Analytics">
+      <AnalyticsView />
+    </DashboardShell>
+  );
+}
