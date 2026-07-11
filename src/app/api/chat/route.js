@@ -1,48 +1,57 @@
 import { NextResponse } from "next/server";
-import Groq from "groq-sdk";
+import { generateText, stepCountIs } from "ai";
+import { createGroq } from "@ai-sdk/groq";
+import { createMCPClient } from "@ai-sdk/mcp";
 import { getCurrentAdmin } from "@/actions/auth";
-import { runMcpTool } from "@/lib/mcp/tools";
-const select = (q) =>
-  q.includes("low stock")
-    ? "low_stock_products"
-    : q.includes("recent order")
-      ? "recent_orders"
-      : q.includes("categor")
-        ? "count_categories"
-        : q.includes("customer")
-          ? "count_customers"
-          : q.includes("review")
-            ? "count_reviews"
-            : q.includes("order")
-              ? "count_orders"
-              : "count_products";
+const groq = createGroq({ apiKey: process.env.MCP_KEY });
+
 export async function POST(request) {
-  if (!(await getCurrentAdmin()))
+  // 1. Auth Guard
+  if (!(await getCurrentAdmin())) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   const { message } = await request.json();
-  const source = await runMcpTool(select((message || "").toLowerCase()));
+
+  // 2. Point to your local MCP server route
+  const mcpClient = await createMCPClient({
+    transport: {
+      type: "http",
+      url: `http://localhost:3000/api/mcp`,
+    },
+  });
+
   try {
-    const groq = new Groq({ apiKey: process.env.MCP_KEY });
-    const r = await groq.chat.completions.create({
-      model: "llama-3.1-8b-instant",
-      max_tokens: 60,
-      temperature: 0,
-      messages: [
-        {
-          role: "system",
-          content:
-            "Answer in one concise sentence using this MCP tool result only.",
-        },
-        {
-          role: "user",
-          content: `Question: ${message}\nMCP result: ${source}`,
-        },
-      ],
+    // 3. Dynamically read tools from your MCP server
+    const myMcpTools = await mcpClient.tools();
+
+    // 4. Let Groq automatically select, invoke, and summarize the tool execution!
+    const response = await generateText({
+      model: groq("llama-3.3-70b-versatile"),
+      tools: myMcpTools,
+      stopWhen: stepCountIs(4),
+      system:
+        "You have tools that take no parameters. Call the relevant tool exactly once with no arguments, then answer in one concise sentence using only the tool result. Do not call the same tool twice.",
+      prompt: message,
     });
-    return NextResponse.json({
-      answer: r.choices[0]?.message?.content || source,
-    });
-  } catch {
-    return NextResponse.json({ answer: source });
+
+    console.log(
+      JSON.stringify(
+        response.steps.map((s) => s.content),
+        null,
+        2,
+      ),
+    );
+
+    return NextResponse.json({ answer: response.text });
+  } catch (error) {
+    console.error("AI/MCP Loop failed:", error);
+    return NextResponse.json(
+      { error: "Failed to generate answer" },
+      { status: 500 },
+    );
+  } finally {
+    // 5. Always cleanly sever client hooks
+    await mcpClient.close();
   }
 }
