@@ -63,17 +63,9 @@ export default function DashboardShell({ children, active = "Dashboard" }) {
           </Link>
         ))}
       </nav>
-      <div className="mt-auto rounded-2xl bg-white/7 p-4">
-        <p className="text-sm font-semibold text-white">Need a hand?</p>
-        <p className="mt-1 text-xs leading-5 text-slate-400">
-          Meet your AI commerce assistant.
-        </p>
-        <button className="mt-3 text-xs font-semibold text-indigo-300">
-          Explore assistant →
-        </button>
-      </div>
-      <form action={logout} className="mt-3">
-        <button className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-slate-300 transition hover:bg-white/8 hover:text-white">
+
+      <form action={logout} className="mt-auto">
+        <button className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-slate-300 transition bg-white/8 hover:text-white">
           <LogOut size={18} /> Log out
         </button>
       </form>
