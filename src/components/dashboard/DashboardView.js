@@ -162,6 +162,39 @@ export default function DashboardView({ data }) {
           </div>
         </div>
       </section>
+      <section className="card mt-5 overflow-hidden">
+        <div className="flex items-center justify-between p-5">
+          <div>
+            <h2 className="font-semibold">Recent products</h2>
+            <p className="mt-1 text-sm muted">The five latest additions to your catalog</p>
+          </div>
+          <span className="rounded-lg bg-[var(--soft)] px-3 py-1.5 text-xs font-semibold text-[var(--primary)]">Latest 5</span>
+        </div>
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-[650px] text-left text-sm">
+            <thead className="border-y border-[var(--line)] text-xs uppercase tracking-wide muted">
+              <tr>
+                <th className="px-5 py-3 font-medium">Product</th>
+                <th className="py-3 font-medium">Stock</th>
+                <th className="py-3 font-medium">Price</th>
+                <th className="py-3 font-medium">Added</th>
+                <th className="px-5 py-3 font-medium">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {data.products.slice(0, 5).map((product) => (
+                <tr key={product.id} className="border-b border-[var(--line)] last:border-0">
+                  <td className="px-5 py-4"><div className="flex items-center gap-3"><span className="grid h-9 w-9 place-items-center rounded-xl bg-[var(--soft)] text-[var(--primary)]"><Box size={16} /></span><span className="font-semibold">{product.name}</span></div></td>
+                  <td className="py-4">{product.stock}</td>
+                  <td className="py-4 font-medium">${Number(product.price).toFixed(2)}</td>
+                  <td className="py-4 muted">{new Date(product.createdAt).toLocaleDateString()}</td>
+                  <td className="px-5 py-4"><Badge type={product.status === "Low stock" ? "warning" : "success"}>{product.status}</Badge></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
       <section className="mt-5 grid gap-5 lg:grid-cols-3">
         <div className="card p-5 lg:col-span-2">
           <h2 className="font-semibold">Top products</h2>
