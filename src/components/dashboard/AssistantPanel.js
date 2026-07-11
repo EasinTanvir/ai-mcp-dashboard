@@ -3,11 +3,10 @@ import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Sparkles, X, Send } from "lucide-react";
 const prompts = [
-  "How many products do we have?",
-  "How many customers?",
-  "How many orders today?",
-
-  "Show low stock products",
+  // "How many products do we have?",
+  // "How many customers?",
+  // "How many orders today?",
+  // "Show low stock products",
 ];
 export default function AssistantPanel() {
   const [open, setOpen] = useState(false),
@@ -68,7 +67,7 @@ export default function AssistantPanel() {
                   <X size={18} />
                 </button>
               </header>
-              <div className="my-5  py-10 flex flex-wrap gap-2">
+              <div className="my-5  py-4 flex flex-wrap gap-2">
                 {prompts.map((p) => (
                   <button
                     onClick={() => ask(p)}
@@ -80,7 +79,7 @@ export default function AssistantPanel() {
                 ))}
               </div>
               {answer && (
-                <div className="rounded-2xl bg-[var(--soft)] p-4 text-sm">
+                <div className="rounded-2xl bg-[var(--soft)] p-4 text-lg font-semibold">
                   {answer}
                 </div>
               )}
@@ -90,15 +89,16 @@ export default function AssistantPanel() {
                   ask(new FormData(e.currentTarget).get("question"));
                   e.currentTarget.reset();
                 }}
-                className="mt-5 flex gap-2"
+                className="mt-5 "
               >
-                <input
+                <textarea
+                  rows={10}
                   name="question"
-                  className="min-w-0 flex-1 rounded-xl border border-[var(--line)] bg-[var(--surface)] px-3 text-sm"
+                  className=" w-full p-4 text-lg flex-1 rounded-xl border border-[var(--line)] bg-[var(--surface)] px-3"
                   placeholder="Ask a question..."
                 />
-                <button className="icon-btn bg-[var(--primary)] text-white">
-                  <Send size={16} />
+                <button className="w-full flex justify-center p-2 items-center rounded-4 gap-2 bg-[var(--primary)] text-white">
+                  send <Send size={16} />
                 </button>
               </form>
             </motion.section>

@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { PageTitle, AIButton, Badge } from "@/components/ui/Atoms";
 import { RevenueChart, SalesChart } from "./Charts";
+import AssistantPanel from "./AssistantPanel";
 export default function DashboardView({ data }) {
   const metrics = [
     [
@@ -32,7 +33,7 @@ export default function DashboardView({ data }) {
         title="Good morning, Alex"
         eyebrow="Your live commerce overview"
       >
-        <AIButton label="Ask Nexa AI" />
+        <AssistantPanel />
       </PageTitle>
       <motion.section
         initial="hidden"
