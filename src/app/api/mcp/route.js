@@ -3,7 +3,7 @@ import { createMcpHandler } from "mcp-handler";
 import { z } from "zod";
 import { db } from "@/db";
 import { products, categories, customers, orders, reviews } from "@/db/schema";
-import { count, eq, desc } from "drizzle-orm";
+import { count, eq, desc, gte, lt, and, sql } from "drizzle-orm";
 
 const total = async (table) =>
   (await db.select({ value: count() }).from(table))[0]?.value ?? 0;
@@ -14,8 +14,14 @@ const handler = createMcpHandler(
       "count_products",
       {
         title: "Count Products",
-        description: "Get the total count of products in the store inventory.",
-        inputSchema: {},
+        description:
+          "Returns the total number of products currently in the store inventory. Use this when the user asks how many products exist, total product count, or size of the catalog.",
+        inputSchema: {
+          random_string: z
+            .string()
+            .optional()
+            .describe("Not used. Always omit or pass any string."),
+        },
       },
       async () => ({
         content: [
@@ -31,7 +37,8 @@ const handler = createMcpHandler(
       "count_categories",
       {
         title: "Count Categories",
-        description: "Get the total number of product categories.",
+        description:
+          "Returns the total number of product categories in the store. Use this when the user asks how many categories exist or how the catalog is organized by category.",
         inputSchema: {},
       },
       async () => ({
@@ -48,7 +55,8 @@ const handler = createMcpHandler(
       "count_orders",
       {
         title: "Count Orders",
-        description: "Get the total count of all customer orders.",
+        description:
+          "Returns the total number of orders ever placed, across all time. Use this for questions about overall/lifetime order volume — NOT for 'today's orders', which has its own tool.",
         inputSchema: {},
       },
       async () => ({
@@ -59,10 +67,47 @@ const handler = createMcpHandler(
     );
 
     server.registerTool(
+      "orders_today",
+      {
+        title: "Orders Placed Today",
+        description:
+          "Returns the count of orders placed today (based on the server's current date). Use this specifically when the user asks about 'today's orders', 'orders today', or how many orders came in today.",
+        inputSchema: {},
+      },
+      async () => {
+        const startOfToday = new Date();
+        startOfToday.setHours(0, 0, 0, 0);
+        const startOfTomorrow = new Date(startOfToday);
+        startOfTomorrow.setDate(startOfTomorrow.getDate() + 1);
+
+        const rows = await db
+          .select({ value: count() })
+          .from(orders)
+          .where(
+            and(
+              gte(orders.createdAt, startOfToday),
+              lt(orders.createdAt, startOfTomorrow),
+            ),
+          );
+
+        const todayCount = rows[0]?.value ?? 0;
+        return {
+          content: [
+            {
+              type: "text",
+              text: `There ${todayCount === 1 ? "is" : "are"} ${todayCount} order${todayCount === 1 ? "" : "s"} placed today.`,
+            },
+          ],
+        };
+      },
+    );
+
+    server.registerTool(
       "count_customers",
       {
         title: "Count Customers",
-        description: "Get the total number of registered customers.",
+        description:
+          "Returns the total number of registered customers. Use this when the user asks how many customers or users the store has.",
         inputSchema: {},
       },
       async () => ({
@@ -79,7 +124,8 @@ const handler = createMcpHandler(
       "count_reviews",
       {
         title: "Count Reviews",
-        description: "Get the total number of product reviews.",
+        description:
+          "Returns the total number of product reviews submitted by customers. Use this when the user asks how many reviews exist or about review volume.",
         inputSchema: {},
       },
       async () => ({
@@ -93,7 +139,8 @@ const handler = createMcpHandler(
       "low_stock_products",
       {
         title: "Low Stock Products",
-        description: "List all items that are running low on stock.",
+        description:
+          "Lists all products currently flagged as low stock, with their remaining quantities. Use this when the user asks which products are running low, need restocking, or about inventory shortages.",
         inputSchema: {},
       },
       async () => {
@@ -101,6 +148,7 @@ const handler = createMcpHandler(
           .select({ name: products.name, stock: products.stock })
           .from(products)
           .where(eq(products.status, "Low stock"));
+
         const text = rows.length
           ? rows.map((x) => `${x.name} (${x.stock})`).join(", ")
           : "No low-stock products.";
@@ -110,10 +158,10 @@ const handler = createMcpHandler(
 
     server.registerTool(
       "recent_orders",
-
       {
         title: "Recent Orders",
-        description: "Get a list of the 3 most recently placed orders.",
+        description:
+          "Returns the 3 most recently placed orders with their order number and status. Use this when the user asks about the latest, most recent, or newest orders.",
         inputSchema: {},
       },
       async () => {
@@ -122,6 +170,7 @@ const handler = createMcpHandler(
           .from(orders)
           .orderBy(desc(orders.createdAt))
           .limit(3);
+
         const text =
           rows.map((x) => `${x.number}: ${x.status}`).join(", ") ||
           "No orders.";

@@ -12,7 +12,7 @@ export async function POST(request) {
   }
 
   const { message } = await request.json();
-
+  console.log("message", message);
   // 2. Point to your local MCP server route
   const mcpClient = await createMCPClient({
     transport: {
@@ -27,11 +27,12 @@ export async function POST(request) {
 
     // 4. Let Groq automatically select, invoke, and summarize the tool execution!
     const response = await generateText({
-      model: groq("llama-3.3-70b-versatile"),
+      model: groq("openai/gpt-oss-20b"),
       tools: myMcpTools,
       stopWhen: stepCountIs(4),
       system:
-        "You have tools that take no parameters. Call the relevant tool exactly once with no arguments, then answer in one concise sentence using only the tool result. Do not call the same tool twice.",
+        "You are a store analytics assistant. You have tools that take no parameters — call the single most relevant tool exactly once with no arguments, then answer in one concise sentence using only that tool's result. Never call the same tool twice, and never call more than one tool per question unless the user explicitly asks for multiple pieces of information. " +
+        "If the user's question does not match any available tool, reply exactly: \"I don't have information about this.\" Do not guess, do not use outside knowledge, and do not attempt a tool call for unrelated questions.",
       prompt: message,
     });
 
