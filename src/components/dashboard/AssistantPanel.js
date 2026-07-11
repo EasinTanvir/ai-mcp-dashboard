@@ -6,8 +6,7 @@ const prompts = [
   "How many products do we have?",
   "How many customers?",
   "How many orders today?",
-  "Weekly sales",
-  "Monthly revenue",
+
   "Show low stock products",
 ];
 export default function AssistantPanel() {
@@ -69,7 +68,7 @@ export default function AssistantPanel() {
                   <X size={18} />
                 </button>
               </header>
-              <div className="my-5 flex flex-wrap gap-2">
+              <div className="my-5  py-10 flex flex-wrap gap-2">
                 {prompts.map((p) => (
                   <button
                     onClick={() => ask(p)}
