@@ -19,9 +19,15 @@ import {
   customerSchema,
 } from "@/lib/validation";
 import {
-  productActions,
-  categoryActions,
-  customerActions,
+  createProduct,
+  updateProduct,
+  deleteProduct,
+  createCategory,
+  updateCategory,
+  deleteCategory,
+  createCustomer,
+  updateCustomer,
+  deleteCustomer,
 } from "@/actions/manage";
 import { hasPermission, permissionMessage } from "@/lib/permissions";
 const icons = {
@@ -33,7 +39,11 @@ const icons = {
 const configs = {
   Products: {
     schema: productSchema,
-    actions: productActions,
+    actions: {
+      create: createProduct,
+      update: updateProduct,
+      remove: deleteProduct,
+    },
     fields: [
       { name: "name", label: "Product name" },
       {
@@ -55,7 +65,11 @@ const configs = {
   },
   Categories: {
     schema: categorySchema,
-    actions: categoryActions,
+    actions: {
+      create: createCategory,
+      update: updateCategory,
+      remove: deleteCategory,
+    },
     fields: [
       { name: "name", label: "Category name" },
       { name: "description", label: "Description" },
@@ -65,7 +79,11 @@ const configs = {
   },
   Customers: {
     schema: customerSchema,
-    actions: customerActions,
+    actions: {
+      create: createCustomer,
+      update: updateCustomer,
+      remove: deleteCustomer,
+    },
     fields: [
       { name: "name", label: "Customer name" },
       { name: "email", label: "Email", type: "email" },
