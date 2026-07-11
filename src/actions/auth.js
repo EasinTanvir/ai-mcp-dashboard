@@ -27,9 +27,13 @@ export async function loginAsDemo() {
   await setSession(admin);
   redirect("/");
 }
-export async function loginAsReal(_, formData) {
+export async function loginAsReal(formData) {
+  console.log("formData", formData);
+
   const parsed = loginSchema.safeParse(Object.fromEntries(formData));
-  if (!parsed.success) return { error: "Enter a valid email and password." };
+  console.log("parsed", parsed);
+  if (!parsed.success) return { error: parsed.error.issues[0].message };
+
   const admin = await db.query.admins.findFirst({
     where: eq(admins.email, parsed.data.email),
   });
