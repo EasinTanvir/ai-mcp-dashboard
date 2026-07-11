@@ -1,6 +1,58 @@
-export const monthly=[{m:"Jan",revenue:18,orders:38},{m:"Feb",revenue:24,orders:46},{m:"Mar",revenue:21,orders:41},{m:"Apr",revenue:31,orders:58},{m:"May",revenue:28,orders:52},{m:"Jun",revenue:42,orders:71},{m:"Jul",revenue:47,orders:78}];
-export const orders=[['#NEX-1048','Maya Chen','Studio Headphones','$249.00','Completed'],['#NEX-1047','Liam Carter','Aero Desk Lamp','$129.00','Processing'],['#NEX-1046','Olivia Diaz','Orbit Keyboard','$189.00','Completed'],['#NEX-1045','Noah Williams','Canvas Tote','$49.00','Shipped'],['#NEX-1044','Emma Wilson','Arc Water Bottle','$38.00','Pending']];
-export const products=[['Arc Headphones','Audio','1,240','In stock','$249'],['Orbit Keyboard','Accessories','832','In stock','$189'],['Aero Desk Lamp','Home office','612','Low stock','$129'],['Canvas Tote','Lifestyle','410','In stock','$49']];
-export const categories=[['Audio','18 products','34.8%','indigo'],['Home Office','24 products','28.2%','violet'],['Lifestyle','16 products','21.7%','emerald'],['Accessories','31 products','15.3%','orange']];
-export const customers=[['Maya Chen','maya@atelier.co','United States','Premium','$2,340'],['Liam Carter','liam@north.co','Canada','Active','$1,920'],['Olivia Diaz','olivia@forms.io','Spain','Premium','$1,605'],['Noah Williams','noah@neon.co','United Kingdom','Active','$1,420'],['Emma Wilson','emma@studio.io','Australia','New','$899']];
-export const reviews=[['Maya Chen','Arc Headphones',5,'The soundstage is unreal — beautifully designed too.','2h ago'],['Liam Carter','Orbit Keyboard',4,'Wonderful tactile feel. The finish is premium.','5h ago'],['Olivia Diaz','Aero Desk Lamp',5,'A small detail that completely elevated my desk.','Yesterday']];
+export const monthly = [
+  { m: "Jan", revenue: 18, orders: 38 },
+  { m: "Feb", revenue: 24, orders: 46 },
+  { m: "Mar", revenue: 21, orders: 41 },
+  { m: "Apr", revenue: 31, orders: 58 },
+  { m: "May", revenue: 28, orders: 52 },
+  { m: "Jun", revenue: 42, orders: 71 },
+  { m: "Jul", revenue: 47, orders: 78 },
+];
+export const orders = [
+  ["#NEX-1048", "Maya Chen", "Studio Headphones", "$249.00", "Completed"],
+  ["#NEX-1047", "Liam Carter", "Aero Desk Lamp", "$129.00", "Processing"],
+  ["#NEX-1046", "Olivia Diaz", "Orbit Keyboard", "$189.00", "Completed"],
+  ["#NEX-1045", "Noah Williams", "Canvas Tote", "$49.00", "Shipped"],
+  ["#NEX-1044", "Emma Wilson", "Arc Water Bottle", "$38.00", "Pending"],
+];
+export const products = [
+  ["Arc Headphones", "Audio", "1,240", "In stock", "$249"],
+  ["Orbit Keyboard", "Accessories", "832", "In stock", "$189"],
+  ["Aero Desk Lamp", "Home office", "612", "Low stock", "$129"],
+  ["Canvas Tote", "Lifestyle", "410", "In stock", "$49"],
+];
+export const categories = [
+  ["Audio", "18 products", "34.8%", "indigo"],
+  ["Home Office", "24 products", "28.2%", "violet"],
+  ["Lifestyle", "16 products", "21.7%", "emerald"],
+  ["Accessories", "31 products", "15.3%", "orange"],
+];
+export const customers = [
+  ["Maya Chen", "maya@atelier.co", "United States", "Premium", "$2,340"],
+  ["Liam Carter", "liam@north.co", "Canada", "Active", "$1,920"],
+  ["Olivia Diaz", "olivia@forms.io", "Spain", "Premium", "$1,605"],
+  ["Noah Williams", "noah@neon.co", "United Kingdom", "Active", "$1,420"],
+  ["Emma Wilson", "emma@studio.io", "Australia", "New", "$899"],
+];
+export const reviews = [
+  [
+    "Maya Chen",
+    "Arc Headphones",
+    5,
+    "The soundstage is unreal — beautifully designed too.",
+    "2h ago",
+  ],
+  [
+    "Liam Carter",
+    "Orbit Keyboard",
+    4,
+    "Wonderful tactile feel. The finish is premium.",
+    "5h ago",
+  ],
+  [
+    "Olivia Diaz",
+    "Aero Desk Lamp",
+    5,
+    "A small detail that completely elevated my desk.",
+    "Yesterday",
+  ],
+];
