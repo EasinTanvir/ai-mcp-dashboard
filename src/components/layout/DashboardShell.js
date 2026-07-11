@@ -107,20 +107,6 @@ export default function DashboardShell({ children, active = "Dashboard" }) {
           )}
         </AnimatePresence>
         <header className="sticky top-0 z-20 flex h-[72px] items-center gap-3 border-b border-[var(--line)] bg-[var(--bg)]/85 px-4 backdrop-blur lg:ml-[248px] lg:px-8">
-          <button
-            onClick={() => setOpen(!open)}
-            className="icon-btn lg:hidden"
-            aria-label="Menu"
-          >
-            {open ? <X size={19} /> : <Menu size={19} />}
-          </button>
-          <div className="hidden max-w-md flex-1 items-center gap-2 rounded-xl border border-[var(--line)] bg-[var(--surface)] px-3 py-2 text-sm text-[var(--muted)] md:flex">
-            <Search size={16} />
-            <span className="flex-1">Search workspace</span>
-            <span className="flex items-center gap-1 rounded border border-[var(--line)] px-1.5 py-0.5 text-[10px]">
-              <Command size={10} /> K
-            </span>
-          </div>
           <div className="ml-auto flex items-center gap-2">
             <button
               className="icon-btn"
@@ -129,10 +115,7 @@ export default function DashboardShell({ children, active = "Dashboard" }) {
             >
               {dark ? <Sun size={18} /> : <Moon size={18} />}
             </button>
-            <button className="icon-btn relative" aria-label="Notifications">
-              <Bell size={18} />
-              <i className="absolute right-2 top-2 h-1.5 w-1.5 rounded-full bg-rose-500" />
-            </button>
+
             <div className="ml-1 flex items-center gap-2 border-l border-[var(--line)] pl-3">
               <div className="grid h-9 w-9 place-items-center rounded-full bg-gradient-to-br from-amber-200 to-orange-300 text-sm font-bold text-orange-800">
                 AC
