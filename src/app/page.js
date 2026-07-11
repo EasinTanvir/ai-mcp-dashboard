@@ -1,2 +1,2 @@
-import DashboardShell from '@/components/layout/DashboardShell'; import DashboardView from '@/components/dashboard/DashboardView';
-export default function Home(){return <DashboardShell active="Dashboard"><DashboardView/></DashboardShell>}
+import DashboardShell from '@/components/layout/DashboardShell'; import DashboardView from '@/components/dashboard/DashboardView'; import {getDashboardData} from '@/db/queries'; import {requireAdmin} from '@/lib/auth';
+export default async function Home(){await requireAdmin();const data=await getDashboardData();return <DashboardShell active="Dashboard"><DashboardView data={data}/></DashboardShell>}

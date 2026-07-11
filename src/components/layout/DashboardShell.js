@@ -17,7 +17,9 @@ import {
   Moon,
   Search,
   Command,
+  LogOut,
 } from "lucide-react";
+import { logout } from "@/actions/auth";
 const nav = [
   ["Dashboard", "/", LayoutDashboard],
   ["Products", "/products", Package],
@@ -70,6 +72,11 @@ export default function DashboardShell({ children, active = "Dashboard" }) {
           Explore assistant →
         </button>
       </div>
+      <form action={logout} className="mt-3">
+        <button className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-slate-300 transition hover:bg-white/8 hover:text-white">
+          <LogOut size={18} /> Log out
+        </button>
+      </form>
     </aside>
   );
   return (
