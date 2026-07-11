@@ -31,8 +31,10 @@ export async function POST(request) {
       tools: myMcpTools,
       stopWhen: stepCountIs(4),
       system:
-        "You are a store analytics assistant. You have tools that take no parameters — call the single most relevant tool exactly once with no arguments, then answer in one concise sentence using only that tool's result. Never call the same tool twice, and never call more than one tool per question unless the user explicitly asks for multiple pieces of information. " +
-        "If the user's question does not match any available tool, reply exactly: \"I don't have information about this.\" Do not guess, do not use outside knowledge, and do not attempt a tool call for unrelated questions.",
+        "You are a store analytics assistant. You have tools that answer questions or perform actions on the store — call the single most relevant tool with the correct arguments extracted from the user's message. " +
+        "For 'add product' requests, pull the name, category, price, and stock directly from what the user typed. For 'dummy/sample/fake product' requests, use the dummy product tool with no need to ask for details. " +
+        "Never call the same tool twice for one question. Answer in one concise sentence using only the tool result. " +
+        "If the user's question does not match any available tool, reply exactly: \"I don't have information about this.\"",
       prompt: message,
     });
 

@@ -11,6 +11,154 @@ const total = async (table) =>
 const handler = createMcpHandler(
   (server) => {
     server.registerTool(
+      "add_product",
+      {
+        title: "Add Product",
+        description:
+          "Creates a new product in the store inventory with a given name, category, price, and stock. Use this when the user explicitly asks to add, create, or list a new product and provides its details in the message. If the named category doesn't already exist, it will be created automatically.",
+        inputSchema: {
+          name: z
+            .string()
+            .min(1)
+            .describe("The product's name/title, e.g. 'Wireless Mouse'."),
+          categoryName: z
+            .string()
+            .min(1)
+            .describe(
+              "The category this product belongs to, e.g. 'Electronics'. Matched case-insensitively; created automatically if it doesn't exist.",
+            ),
+          price: z
+            .number()
+            .positive()
+            .describe("The product's price, e.g. 29.99."),
+          stock: z
+            .number()
+            .int()
+            .min(0)
+            .optional()
+            .describe(
+              "Initial stock quantity. Defaults to 0 if the user doesn't mention it.",
+            ),
+        },
+      },
+      async ({ name, categoryName, price, stock }) => {
+        let [category] = await db
+          .select()
+          .from(categories)
+          .where(sql`lower(${categories.name}) = lower(${categoryName})`);
+
+        if (!category) {
+          [category] = await db
+            .insert(categories)
+            .values({ name: categoryName })
+            .returning();
+        }
+
+        const [product] = await db
+          .insert(products)
+          .values({
+            name,
+            categoryId: category.id,
+            price: price.toFixed(2),
+            stock: stock ?? 0,
+          })
+          .returning();
+
+        return {
+          content: [
+            {
+              type: "text",
+              text: `Created product "${product.name}" in category "${category.name}" at $${product.price}, with ${product.stock} in stock.`,
+            },
+          ],
+        };
+      },
+    );
+
+    server.registerTool(
+      "create_dummy_products",
+      {
+        title: "Create Dummy Products",
+        description:
+          "Creates one or more sample/placeholder products with randomly generated name, category, price, and stock — for testing or demo purposes. Use this when the user asks to create dummy, sample, test, fake, or placeholder product(s).",
+        inputSchema: {
+          count: z
+            .number()
+            .int()
+            .min(1)
+            .max(5)
+            .optional()
+            .describe(
+              "How many dummy products to create. Defaults to 1 if not specified. Max 5 per call.",
+            ),
+        },
+      },
+      async ({ count: howMany }) => {
+        const num = howMany ?? 1;
+
+        const adjectives = [
+          "Sleek",
+          "Compact",
+          "Rugged",
+          "Wireless",
+          "Premium",
+          "Portable",
+          "Smart",
+          "Eco",
+        ];
+        const nouns = [
+          "Backpack",
+          "Headphones",
+          "Charger",
+          "Lamp",
+          "Mug",
+          "Speaker",
+          "Keyboard",
+          "Bottle",
+        ];
+        const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
+
+        const existingCategories = await db.select().from(categories);
+
+        const created = [];
+        for (let i = 0; i < num; i++) {
+          let category;
+          if (existingCategories.length > 0) {
+            category = pick(existingCategories);
+          } else {
+            [category] = await db
+              .insert(categories)
+              .values({ name: "General" })
+              .returning();
+            existingCategories.push(category);
+          }
+
+          const name = `${pick(adjectives)} ${pick(nouns)}`;
+          const price = (Math.random() * 195 + 5).toFixed(2); // $5 - $200
+          const stock = Math.floor(Math.random() * 100);
+
+          const [product] = await db
+            .insert(products)
+            .values({ name, categoryId: category.id, price, stock })
+            .returning();
+
+          created.push(
+            `${product.name} ($${product.price}, ${category.name}, stock ${product.stock})`,
+          );
+        }
+
+        return {
+          content: [
+            {
+              type: "text",
+              text: `Created ${num} dummy product(s): ${created.join("; ")}.`,
+            },
+          ],
+        };
+      },
+    );
+
+    server.registerTool(
       "count_products",
       {
         title: "Count Products",

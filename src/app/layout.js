@@ -11,9 +11,9 @@ export default function RootLayout({ children }) {
       <body>
         {children}
         <Toaster />{" "}
-        {/* <div className="fixed bottom-5 right-5 z-30">
+        <div className="fixed bottom-5 right-5 z-30">
           <AssistantPanel />
-        </div> */}
+        </div>
       </body>
     </html>
   );
