@@ -9,7 +9,9 @@ export default async function Home() {
   return (
     <DashboardShell active="Dashboard">
       <DashboardView data={data} />
-      <div className="fixed bottom-5 right-5 z-30"><AssistantPanel /></div>
+      <div className="fixed bottom-5 right-5 z-30">
+        <AssistantPanel />
+      </div>
     </DashboardShell>
   );
 }

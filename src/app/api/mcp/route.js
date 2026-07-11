@@ -1,2 +1,15 @@
-import {NextResponse} from 'next/server'; import {mcpTools,runMcpTool} from '@/lib/mcp/tools';
-export async function GET(){return NextResponse.json({tools:Object.keys(mcpTools)});} export async function POST(request){const {tool}=await request.json();try{return NextResponse.json({content:[{type:'text',text:await runMcpTool(tool)}]});}catch{return NextResponse.json({error:'Unknown MCP tool'},{status:400});}}
+import { NextResponse } from "next/server";
+import { mcpTools, runMcpTool } from "@/lib/mcp/tools";
+export async function GET() {
+  return NextResponse.json({ tools: Object.keys(mcpTools) });
+}
+export async function POST(request) {
+  const { tool } = await request.json();
+  try {
+    return NextResponse.json({
+      content: [{ type: "text", text: await runMcpTool(tool) }],
+    });
+  } catch {
+    return NextResponse.json({ error: "Unknown MCP tool" }, { status: 400 });
+  }
+}
