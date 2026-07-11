@@ -34,9 +34,9 @@ export function PageTitle({ title, eyebrow, children }) {
     </div>
   );
 }
-export function AIButton({ label = "Ask AI" }) {
+export function AIButton({ label = "Ask AI", onClick }) {
   return (
-    <button className="inline-flex items-center justify-center gap-2 rounded-xl bg-[var(--primary)] px-4 py-2.5 text-sm font-semibold text-white shadow-lg shadow-indigo-500/20 transition hover:-translate-y-0.5">
+    <button onClick={onClick} className="inline-flex items-center justify-center gap-2 rounded-xl bg-[var(--primary)] px-4 py-2.5 text-sm font-semibold text-white shadow-lg shadow-indigo-500/20 transition hover:-translate-y-0.5">
       <Sparkles size={16} />
       {label}
     </button>
