@@ -1,2 +1,28 @@
-export const roles={DEMO:'DEMO_ADMIN',REAL:'ADMIN'}; const access={DEMO_ADMIN:new Set(['view','dashboard_ai']),ADMIN:new Set(['view','dashboard_ai','create','update','delete','page_ai','mcp']),demo:new Set(['view','dashboard_ai']),real:new Set(['view','dashboard_ai','create','update','delete','page_ai','mcp'])};
-export const hasPermission=(role,permission)=>access[role]?.has(permission)??false; export const isDemoAdmin=role=>role===roles.DEMO||role==='demo'; export const isRealAdmin=role=>role===roles.REAL||role==='real'; export const permissionMessage='Demo Admin cannot perform this action.';
+export const roles = { DEMO: "DEMO_ADMIN", REAL: "ADMIN" };
+const access = {
+  DEMO_ADMIN: new Set(["view", "dashboard_ai"]),
+  ADMIN: new Set([
+    "view",
+    "dashboard_ai",
+    "create",
+    "update",
+    "delete",
+    "page_ai",
+    "mcp",
+  ]),
+  demo: new Set(["view", "dashboard_ai"]),
+  real: new Set([
+    "view",
+    "dashboard_ai",
+    "create",
+    "update",
+    "delete",
+    "page_ai",
+    "mcp",
+  ]),
+};
+export const hasPermission = (role, permission) =>
+  access[role]?.has(permission) ?? false;
+export const isDemoAdmin = (role) => role === roles.DEMO || role === "demo";
+export const isRealAdmin = (role) => role === roles.REAL || role === "real";
+export const permissionMessage = "Demo Admin cannot perform this action.";
