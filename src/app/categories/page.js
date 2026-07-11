@@ -3,12 +3,13 @@ import { ManagementView } from "@/components/pages/ManagementView";
 import { getManagementData } from "@/db/queries";
 import { requireAdmin } from "@/lib/auth";
 export default async function Page() {
-  await requireAdmin();
+  const admin = await requireAdmin();
   return (
     <DashboardShell active="Categories">
       <ManagementView
         type="Categories"
         data={await getManagementData("categories")}
+        role={admin.role}
       />
     </DashboardShell>
   );
