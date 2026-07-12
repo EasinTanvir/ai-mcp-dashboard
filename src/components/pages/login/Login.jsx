@@ -78,7 +78,6 @@ const Login = () => {
               className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-white px-4 py-3 text-sm font-semibold text-slate-900 transition hover:bg-indigo-50"
             >
               Login as Demo Admin
-              <ArrowRight size={17} />
             </button>
           </form>
         </div>
@@ -136,10 +135,7 @@ const Login = () => {
                 Signing in...
               </>
             ) : (
-              <>
-                <KeyRound size={16} />
-                Login
-              </>
+              <>Login</>
             )}
           </button>
         </form>

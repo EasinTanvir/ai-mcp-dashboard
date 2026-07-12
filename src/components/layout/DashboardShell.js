@@ -48,6 +48,7 @@ export default function DashboardShell({ children, active = "Dashboard" }) {
       <nav className="space-y-1">
         {nav.map(([name, href, Icon]) => (
           <Link
+            prefetch
             key={name}
             href={href}
             onClick={() => setOpen(false)}
