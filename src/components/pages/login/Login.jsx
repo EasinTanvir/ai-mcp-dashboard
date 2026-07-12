@@ -146,15 +146,11 @@ const Login = () => {
             ) : (
               <>
                 <KeyRound size={16} />
-                Login as Real Admin
+                Login
               </>
             )}
           </button>
         </form>
-
-        <p className="mt-5 text-center text-xs text-slate-500">
-          Test credentials: admin@nexa.local · NexaAdmin2026!
-        </p>
       </section>
     </main>
   );
