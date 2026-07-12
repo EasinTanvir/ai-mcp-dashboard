@@ -45,7 +45,7 @@ export function PageTitle({ title, eyebrow, children }) {
         <p className="mb-1 text-sm font-medium text-[var(--primary)]">
           {eyebrow || "Workspace overview"}
         </p>
-        <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
+        <h1 className="text-2xl font-bold tracking-tight text-[var(--text)] sm:text-3xl">
           {title}
         </h1>
       </div>
