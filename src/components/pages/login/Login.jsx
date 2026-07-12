@@ -50,7 +50,7 @@ const Login = () => {
       <div className="absolute h-96 w-96 -translate-x-40 -translate-y-40 rounded-full bg-indigo-600/30 blur-3xl" />
 
       <section className="relative w-full max-w-md rounded-[28px] border border-white/10 bg-slate-900/80 p-7 text-white shadow-2xl backdrop-blur sm:p-9">
-        <div className="grid h-12 w-12 place-items-center rounded-2xl bg-gradient-to-br from-indigo-400 to-violet-600">
+        <div className="grid h-12 w-12 mx-auto place-items-center rounded-2xl bg-gradient-to-br from-indigo-400 to-violet-600">
           <Sparkles size={22} />
         </div>
 
@@ -58,19 +58,11 @@ const Login = () => {
           Nexa workspace
         </p>
 
-        <h1 className="mt-2 text-3xl font-bold tracking-tight">
-          Welcome back.
-        </h1>
-
-        <p className="mt-3 leading-6 text-slate-400">
-          Choose a safe demo session or sign in as the workspace administrator.
-        </p>
+        <h1 className="mt-2 text-3xl font-bold !text-white"> Welcome back.</h1>
 
         {/* Demo Login */}
         <div className="mt-7 rounded-2xl border border-white/10 bg-white/5 p-4">
           <div className="flex items-center gap-3">
-            <ShieldCheck className="text-emerald-400" size={21} />
-
             <div>
               <p className="text-sm font-semibold">Demo Admin</p>
 
@@ -99,7 +91,7 @@ const Login = () => {
 
         {/* Real Admin Login */}
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
-          <label className="block text-xs font-medium text-slate-300">
+          <label className="block text-xs font-medium !text-slate-300">
             Email
             <input
               type="email"
@@ -116,7 +108,7 @@ const Login = () => {
             )}
           </label>
 
-          <label className="block text-xs font-medium text-slate-300">
+          <label className="block text-xs font-medium !text-slate-300">
             Password
             <input
               type="password"
