@@ -5,11 +5,11 @@ import { Sparkles, X, Send, Package, ShoppingBag } from "lucide-react";
 import { usePathname } from "next/navigation";
 
 const prompts = [
-  "How many products do we have?",
-  "How many customers?",
-  "How many orders today?",
-  "Show low stock products",
-  "Show me the most recent orders",
+  // "How many products do we have?",
+  // "How many customers?",
+  // "How many orders today?",
+  // "Show low stock products",
+  // "Show me the most recent orders",
 ];
 
 export default function AssistantPanel() {
@@ -18,6 +18,15 @@ export default function AssistantPanel() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
   const pathname = usePathname();
+  const [question, setQuestion] = useState("");
+
+  const closeAndReset = () => {
+    setOpen(false);
+    setAnswer("");
+    setData(null);
+    setLoading(false);
+    setQuestion("");
+  };
 
   const ask = async (message) => {
     if (!message) return;
@@ -37,9 +46,9 @@ export default function AssistantPanel() {
       setAnswer("Unable to answer right now.");
     } finally {
       setLoading(false);
+      setQuestion(""); // clear input only after the response lands
     }
   };
-
   if (pathname.includes("login")) return null;
 
   return (
@@ -58,7 +67,7 @@ export default function AssistantPanel() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="fixed inset-0 z-[60] grid place-items-end bg-slate-950/35 p-4 sm:place-items-center"
-            onClick={() => setOpen(false)}
+            onClick={closeAndReset}
           >
             <motion.section
               initial={{ opacity: 0, y: 18 }}
@@ -77,7 +86,7 @@ export default function AssistantPanel() {
                     <p className="text-xs muted">Workspace assistant</p>
                   </div>
                 </div>
-                <button onClick={() => setOpen(false)} className="icon-btn">
+                <button onClick={closeAndReset} className="icon-btn">
                   <X size={18} />
                 </button>
               </header>
@@ -167,18 +176,22 @@ export default function AssistantPanel() {
               <form
                 onSubmit={(e) => {
                   e.preventDefault();
-                  ask(new FormData(e.currentTarget).get("question"));
-                  e.currentTarget.reset();
+                  ask(question);
                 }}
                 className="mt-5"
               >
                 <textarea
                   rows={4}
-                  name="question"
-                  className="w-full p-4 text-lg flex-1 rounded-xl border border-[var(--line)] bg-[var(--surface)] px-3"
+                  value={question}
+                  onChange={(e) => setQuestion(e.target.value)}
+                  disabled={loading}
+                  className="w-full p-4 text-lg flex-1 rounded-xl border border-[var(--line)] bg-[var(--surface)] px-3 disabled:opacity-60"
                   placeholder="Ask a question..."
                 />
-                <button className="w-full flex justify-center p-2 items-center rounded-xl gap-2 bg-[var(--primary)] text-white mt-2">
+                <button
+                  disabled={loading}
+                  className="w-full flex justify-center p-2 items-center rounded-xl gap-2 bg-[var(--primary)] text-white mt-2 disabled:opacity-60"
+                >
                   send <Send size={16} />
                 </button>
               </form>

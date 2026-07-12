@@ -39,7 +39,7 @@ const Login = () => {
       // Success: redirect() inside the server action will handle navigation.
     } catch (error) {
       console.error(error);
-      toast.error("Something went wrong. Please try again.");
+      //toast.error("Something went wrong. Please try again.");
     } finally {
       setLoading(false);
     }
