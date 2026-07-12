@@ -83,7 +83,7 @@ const Login = () => {
         </div>
 
         {/* Real Admin Login */}
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-3 pt-6">
           <label className="block text-xs font-medium !text-slate-300">
             Email
             <input
