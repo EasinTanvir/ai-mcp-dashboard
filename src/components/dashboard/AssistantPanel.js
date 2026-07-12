@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Sparkles, X, Send, Package, ShoppingBag } from "lucide-react";
+import { usePathname } from "next/navigation";
 
 const prompts = [
   "How many products do we have?",
@@ -16,6 +17,7 @@ export default function AssistantPanel() {
   const [answer, setAnswer] = useState("");
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
+  const pathname = usePathname();
 
   const ask = async (message) => {
     if (!message) return;
@@ -37,6 +39,8 @@ export default function AssistantPanel() {
       setLoading(false);
     }
   };
+
+  if (pathname.includes("login")) return null;
 
   return (
     <>
