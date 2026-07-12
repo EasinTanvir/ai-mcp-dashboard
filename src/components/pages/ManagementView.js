@@ -236,7 +236,8 @@ function SimpleTable({ type, data, Icon }) {
       <div className="card p-5">
         {data.map((x) => (
           <div className="border-b border-[var(--line)] py-4" key={x.id}>
-            {x.orderNumber} · {x.customerName} · <Badge>{x.status}</Badge>
+            {x.orderNumber} · {x.customerName} ·{" "}
+            <Badge type={x.status}>{x.status}</Badge>
           </div>
         ))}
       </div>

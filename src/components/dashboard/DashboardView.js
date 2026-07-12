@@ -142,11 +142,7 @@ export default function DashboardView({ data }) {
                     </td>
                     <td>${Number(o.total).toFixed(2)}</td>
                     <td className="px-5">
-                      <Badge
-                        type={o.status === "Pending" ? "warning" : "success"}
-                      >
-                        {o.status}
-                      </Badge>
+                      <Badge type={o.status}>{o.status}</Badge>
                     </td>
                   </tr>
                 ))}

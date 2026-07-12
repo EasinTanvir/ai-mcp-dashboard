@@ -359,6 +359,57 @@ const handler = createMcpHandler(
         };
       },
     );
+
+    server.registerTool(
+      "update_order_status",
+      {
+        title: "Update Order Status",
+        description:
+          "Updates the status of a specific order, identified by its order number (e.g. 'NEX-1048'). Use this when the user asks to mark, set, update, or change an order's status. Valid statuses are: Pending, Processing, Shipped, Completed.",
+        inputSchema: {
+          orderNumber: z
+            .string()
+            .min(1)
+            .describe("The order's number, e.g. 'NEX-1048'."),
+          status: z
+            .enum(["Pending", "Processing", "Shipped", "Completed"])
+            .describe("The new status to set for this order."),
+        },
+      },
+      async ({ orderNumber, status }) => {
+        const [existing] = await db
+          .select({ id: orders.id, status: orders.status })
+          .from(orders)
+          .where(eq(orders.orderNumber, orderNumber));
+
+        if (!existing) {
+          return {
+            content: [
+              {
+                type: "text",
+                text: `Sir, I couldn't find an order with number "${orderNumber}".`,
+              },
+            ],
+            isError: true,
+          };
+        }
+
+        const [updated] = await db
+          .update(orders)
+          .set({ status, updatedAt: new Date() })
+          .where(eq(orders.orderNumber, orderNumber))
+          .returning();
+
+        return {
+          content: [
+            {
+              type: "text",
+              text: `Sir, order ${updated.orderNumber} has been updated from "${existing.status}" to "${updated.status}".`,
+            },
+          ],
+        };
+      },
+    );
   },
   {},
   { basePath: "/api", verboseLogs: true },

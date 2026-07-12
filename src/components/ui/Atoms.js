@@ -1,17 +1,36 @@
 "use client";
 import { ChevronDown, Search, Sparkles } from "lucide-react";
 export function Badge({ children, type = "success" }) {
-  let c = {
-    success:
-      "bg-emerald-50 text-emerald-700 dark:bg-emerald-400/10 dark:text-emerald-300",
-    warning:
-      "bg-amber-50 text-amber-700 dark:bg-amber-400/10 dark:text-amber-300",
-    info: "bg-indigo-50 text-indigo-700 dark:bg-indigo-400/10 dark:text-indigo-300",
-  }[type];
+  const styles = {
+    // generic types
+    success: "bg-emerald-500 text-white",
+    warning: "bg-amber-500 text-white",
+    info: "bg-indigo-500 text-white",
+    danger: "bg-rose-500 text-white",
+    neutral: "bg-slate-500 text-white",
+
+    // order status — each gets its own distinct color
+    pending: "bg-slate-500 text-white", // neutral gray — hasn't started
+    processing: "bg-amber-500 text-white", // amber — in progress
+    shipped: "bg-blue-500 text-white", // blue — on the way
+    completed: "bg-emerald-500 text-white", // green — done
+
+    // payment status
+    paid: "bg-emerald-500 text-white",
+    unpaid: "bg-rose-500 text-white",
+    refunded: "bg-purple-500 text-white",
+
+    // shipping status
+    "in transit": "bg-blue-500 text-white",
+    delivered: "bg-emerald-500 text-white",
+  };
+
+  const c = styles[type?.toLowerCase()] ?? styles.neutral;
+  console.log("Badge type:", type, "class:", c);
   return (
     <span
       className={
-        "inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold " +
+        "inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold shadow-sm " +
         c
       }
     >
