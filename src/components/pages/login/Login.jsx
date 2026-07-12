@@ -82,12 +82,6 @@ const Login = () => {
           </form>
         </div>
 
-        <div className="my-6 flex items-center gap-3 text-xs text-slate-500">
-          <i className="h-px flex-1 bg-white/10" />
-          Real administrator
-          <i className="h-px flex-1 bg-white/10" />
-        </div>
-
         {/* Real Admin Login */}
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
           <label className="block text-xs font-medium !text-slate-300">
