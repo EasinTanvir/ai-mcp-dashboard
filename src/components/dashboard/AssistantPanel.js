@@ -1,19 +1,27 @@
 "use client";
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Sparkles, X, Send } from "lucide-react";
+import { Sparkles, X, Send, Package, ShoppingBag } from "lucide-react";
+
 const prompts = [
-  // "How many products do we have?",
-  // "How many customers?",
-  // "How many orders today?",
-  // "Show low stock products",
+  "How many products do we have?",
+  "How many customers?",
+  "How many orders today?",
+  "Show low stock products",
+  "Show me the most recent orders",
 ];
+
 export default function AssistantPanel() {
-  const [open, setOpen] = useState(false),
-    [answer, setAnswer] = useState("");
+  const [open, setOpen] = useState(false);
+  const [answer, setAnswer] = useState("");
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(false);
+
   const ask = async (message) => {
     if (!message) return;
-    setAnswer("Thinking…");
+    setLoading(true);
+    setAnswer("");
+    setData(null);
     try {
       const r = await fetch("/api/chat", {
         method: "POST",
@@ -22,10 +30,14 @@ export default function AssistantPanel() {
       });
       const json = await r.json();
       setAnswer(json.answer || json.error || "Unable to answer right now.");
+      setData(json.data || null);
     } catch {
       setAnswer("Unable to answer right now.");
+    } finally {
+      setLoading(false);
     }
   };
+
   return (
     <>
       <button
@@ -49,7 +61,7 @@ export default function AssistantPanel() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 18 }}
               onClick={(e) => e.stopPropagation()}
-              className="w-full max-w-lg rounded-3xl border border-[var(--line)] bg-[var(--surface)] p-5 shadow-2xl"
+              className="w-full max-w-lg rounded-3xl border border-[var(--line)] bg-[var(--surface)] p-5 shadow-2xl max-h-[85vh] overflow-y-auto"
             >
               <header className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
@@ -58,46 +70,111 @@ export default function AssistantPanel() {
                   </span>
                   <div>
                     <h2 className="font-semibold">Nexa AI</h2>
-                    <p className="text-xs muted">
-                      Read-only workspace assistant
-                    </p>
+                    <p className="text-xs muted">Workspace assistant</p>
                   </div>
                 </div>
                 <button onClick={() => setOpen(false)} className="icon-btn">
                   <X size={18} />
                 </button>
               </header>
-              <div className="my-5  py-4 flex flex-wrap gap-2">
+
+              <div className="my-5 py-4 flex flex-wrap gap-2">
                 {prompts.map((p) => (
                   <button
                     onClick={() => ask(p)}
                     key={p}
-                    className="rounded-lg border border-[var(--line)] px-3 py-2 text-left text-xs"
+                    className="rounded-lg border border-[var(--line)] px-3 py-2 text-left text-xs hover:bg-[var(--soft)] transition-colors"
                   >
                     {p}
                   </button>
                 ))}
               </div>
-              {answer && (
+
+              {loading && (
+                <div className="rounded-2xl bg-[var(--soft)] p-4 text-sm muted animate-pulse">
+                  Thinking…
+                </div>
+              )}
+
+              {!loading && answer && (
                 <div className="rounded-2xl bg-[var(--soft)] p-4 text-lg font-semibold">
                   {answer}
                 </div>
               )}
+
+              {!loading &&
+                data?.type === "orders" &&
+                data.items?.length > 0 && (
+                  <div className="mt-4 space-y-2">
+                    {data.items.map((order, i) => (
+                      <div
+                        key={i}
+                        className="flex items-center gap-3 rounded-xl border border-[var(--line)] p-3"
+                      >
+                        <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-[var(--soft)] text-[var(--primary)]">
+                          <ShoppingBag size={16} />
+                        </span>
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-center justify-between gap-2">
+                            <p className="truncate text-sm font-semibold">
+                              {order.orderNumber}
+                            </p>
+                            <span className="shrink-0 rounded-full bg-[var(--soft)] px-2 py-0.5 text-xs font-medium">
+                              {order.status}
+                            </span>
+                          </div>
+                          <p className="truncate text-xs muted">
+                            {order.customerName || "Unknown customer"}
+                            {order.customerEmail
+                              ? ` · ${order.customerEmail}`
+                              : ""}
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+              {!loading &&
+                data?.type === "products" &&
+                data.items?.length > 0 && (
+                  <div className="mt-4 space-y-2">
+                    {data.items.map((product, i) => (
+                      <div
+                        key={i}
+                        className="flex items-center gap-3 rounded-xl border border-[var(--line)] p-3"
+                      >
+                        <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-[var(--soft)] text-[var(--primary)]">
+                          <Package size={16} />
+                        </span>
+                        <div className="min-w-0 flex-1">
+                          <p className="truncate text-sm font-semibold">
+                            {product.name}
+                          </p>
+                          <p className="text-xs muted">
+                            {product.stock} in stock
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
               <form
                 onSubmit={(e) => {
                   e.preventDefault();
                   ask(new FormData(e.currentTarget).get("question"));
                   e.currentTarget.reset();
                 }}
-                className="mt-5 "
+                className="mt-5"
               >
                 <textarea
-                  rows={10}
+                  rows={4}
                   name="question"
-                  className=" w-full p-4 text-lg flex-1 rounded-xl border border-[var(--line)] bg-[var(--surface)] px-3"
+                  className="w-full p-4 text-lg flex-1 rounded-xl border border-[var(--line)] bg-[var(--surface)] px-3"
                   placeholder="Ask a question..."
                 />
-                <button className="w-full flex justify-center p-2 items-center rounded-4 gap-2 bg-[var(--primary)] text-white">
+                <button className="w-full flex justify-center p-2 items-center rounded-xl gap-2 bg-[var(--primary)] text-white mt-2">
                   send <Send size={16} />
                 </button>
               </form>

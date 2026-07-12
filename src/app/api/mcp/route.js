@@ -284,45 +284,79 @@ const handler = createMcpHandler(
     );
 
     server.registerTool(
+      "recent_orders",
+      {
+        title: "Recent Orders",
+        description:
+          "Returns the 3 most recently placed orders, including each order's number, status, and the customer's name and email. Use this when the user asks about the latest, most recent, or newest orders.",
+        inputSchema: {
+          random_string: z
+            .string()
+            .optional()
+            .describe("Not used. Always omit or pass any string."),
+        },
+      },
+      async () => {
+        const rows = await db
+          .select({
+            orderNumber: orders.orderNumber,
+            status: orders.status,
+            customerName: customers.name,
+            customerEmail: customers.email,
+          })
+          .from(orders)
+          .leftJoin(customers, eq(orders.customerId, customers.id))
+          .orderBy(desc(orders.createdAt))
+          .limit(3);
+
+        const summary = rows.length
+          ? `Here are the ${rows.length} most recent orders.`
+          : "There are no orders yet.";
+
+        return {
+          content: [
+            {
+              type: "text",
+              text: JSON.stringify({ summary, type: "orders", items: rows }),
+            },
+          ],
+        };
+      },
+    );
+
+    server.registerTool(
       "low_stock_products",
       {
         title: "Low Stock Products",
         description:
-          "Lists all products currently flagged as low stock, with their remaining quantities. Use this when the user asks which products are running low, need restocking, or about inventory shortages.",
-        inputSchema: {},
+          "Returns up to the 3 products with the lowest stock, each with name and remaining quantity. Use this when the user asks which products are running low, need restocking, or about inventory shortages.",
+        inputSchema: {
+          random_string: z
+            .string()
+            .optional()
+            .describe("Not used. Always omit or pass any string."),
+        },
       },
       async () => {
         const rows = await db
           .select({ name: products.name, stock: products.stock })
           .from(products)
-          .where(eq(products.status, "Low stock"));
-
-        const text = rows.length
-          ? rows.map((x) => `${x.name} (${x.stock})`).join(", ")
-          : "No low-stock products.";
-        return { content: [{ type: "text", text }] };
-      },
-    );
-
-    server.registerTool(
-      "recent_orders",
-      {
-        title: "Recent Orders",
-        description:
-          "Returns the 3 most recently placed orders with their order number and status. Use this when the user asks about the latest, most recent, or newest orders.",
-        inputSchema: {},
-      },
-      async () => {
-        const rows = await db
-          .select({ number: orders.orderNumber, status: orders.status })
-          .from(orders)
-          .orderBy(desc(orders.createdAt))
+          .where(eq(products.status, "Low stock"))
+          .orderBy(products.stock)
           .limit(3);
 
-        const text =
-          rows.map((x) => `${x.number}: ${x.status}`).join(", ") ||
-          "No orders.";
-        return { content: [{ type: "text", text }] };
+        const summary = rows.length
+          ? `Here are the ${rows.length} lowest stock products.`
+          : "No low-stock products.";
+
+        return {
+          content: [
+            {
+              type: "text",
+              text: JSON.stringify({ summary, type: "products", items: rows }),
+            },
+          ],
+        };
       },
     );
   },
