@@ -5,11 +5,11 @@ import { Sparkles, X, Send, Package, ShoppingBag } from "lucide-react";
 import { usePathname } from "next/navigation";
 
 const prompts = [
-  // "How many products do we have?",
-  // "How many customers?",
-  // "How many orders today?",
-  // "Show low stock products",
-  // "Show me the most recent orders",
+  "How many products do we have?",
+  "How many customers?",
+  "How many orders today?",
+  "Show low stock products",
+  "Show me the most recent orders",
 ];
 
 export default function AssistantPanel() {
