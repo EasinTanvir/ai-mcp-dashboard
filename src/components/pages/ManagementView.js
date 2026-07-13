@@ -233,13 +233,114 @@ function SimpleTable({ type, data, Icon }) {
   return (
     <>
       <PageTitle title={type} eyebrow="Commerce management" />
-      <div className="card p-5">
-        {data.map((x) => (
-          <div className="border-b border-[var(--line)] py-4" key={x.id}>
-            {x.orderNumber} · {x.customerName} ·{" "}
-            <Badge type={x.status}>{x.status}</Badge>
+
+      {/* Stats */}
+      <div className="mb-5 grid gap-4 sm:grid-cols-3">
+        {[
+          ["Total Orders", data.length],
+          ["Completed", data.filter((x) => x.status === "Completed").length],
+          ["Pending", data.filter((x) => x.status === "Pending").length],
+        ].map(([title, value]) => (
+          <div className="card p-5" key={title}>
+            <div className="flex items-center justify-between">
+              <span className="text-sm muted">{title}</span>
+              <span className="rounded-xl bg-[var(--soft)] p-2 text-[var(--primary)]">
+                <Icon size={17} />
+              </span>
+            </div>
+
+            <p className="mt-4 text-2xl font-bold">{value}</p>
           </div>
         ))}
+      </div>
+
+      <div className="card overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-[1100px] text-left text-sm">
+            <thead className="border-y border-[var(--line)] bg-[var(--soft)]">
+              <tr>
+                <th className="px-5 py-3 font-semibold">Order</th>
+                <th className="px-5 py-3 font-semibold">Customer</th>
+                <th className="px-5 py-3 font-semibold">Email</th>
+                <th className="px-5 py-3 font-semibold">Product</th>
+                <th className="px-5 py-3 font-semibold">Total</th>
+                <th className="px-5 py-3 font-semibold">Order</th>
+                <th className="px-5 py-3 font-semibold">Payment</th>
+                <th className="px-5 py-3 font-semibold">Shipping</th>
+                <th className="px-5 py-3 font-semibold">Created</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {data.map((order, i) => (
+                <motion.tr
+                  key={order.id}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: i * 0.03 }}
+                  className="border-b border-[var(--line)] hover:bg-[var(--soft)]"
+                >
+                  {/* Order */}
+                  <td className="px-5 py-4 font-semibold">
+                    {order.orderNumber}
+                  </td>
+
+                  {/* Customer */}
+                  <td className="px-5 py-4">{order.customerName}</td>
+
+                  {/* Email */}
+                  <td className="px-5 py-4 text-[var(--muted)]">
+                    {order.customerEmail}
+                  </td>
+
+                  {/* Product */}
+                  <td className="px-5 py-4">{order.productName}</td>
+
+                  {/* Total */}
+                  <td className="px-5 py-4 font-medium">
+                    ${Number(order.total).toFixed(2)}
+                  </td>
+
+                  {/* Order Status */}
+                  <td className="px-5 py-4">
+                    <Badge type={order.status}>{order.status}</Badge>
+                  </td>
+
+                  {/* Payment */}
+                  <td className="px-5 py-4">
+                    <Badge
+                      type={
+                        order.paymentStatus === "Paid" ? "success" : "warning"
+                      }
+                    >
+                      {order.paymentStatus}
+                    </Badge>
+                  </td>
+
+                  {/* Shipping */}
+                  <td className="px-5 py-4">
+                    <Badge
+                      type={
+                        order.shippingStatus === "Delivered"
+                          ? "success"
+                          : order.shippingStatus === "Shipped"
+                            ? "info"
+                            : "warning"
+                      }
+                    >
+                      {order.shippingStatus}
+                    </Badge>
+                  </td>
+
+                  {/* Date */}
+                  <td className="px-5 py-4 text-[var(--muted)]">
+                    {new Date(order.createdAt).toLocaleDateString()}
+                  </td>
+                </motion.tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </>
   );

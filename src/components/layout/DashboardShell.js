@@ -27,7 +27,6 @@ const nav = [
   ["Orders", "/orders", ShoppingBag],
   ["Customers", "/customers", Users],
   ["Analytics", "/analytics", ChartNoAxesCombined],
-  ["Reviews", "/reviews", Star],
 ];
 export default function DashboardShell({ children, active = "Dashboard" }) {
   const [open, setOpen] = useState(false),
@@ -42,10 +41,8 @@ export default function DashboardShell({ children, active = "Dashboard" }) {
           nexa<span className="text-indigo-300">.</span>
         </span>
       </div>
-      <p className="mb-3 px-2 text-[10px] font-bold uppercase tracking-[.16em] text-slate-500">
-        Workspace
-      </p>
-      <nav className="space-y-1">
+
+      <nav className="space-y-4">
         {nav.map(([name, href, Icon]) => (
           <Link
             prefetch
