@@ -29,12 +29,6 @@ export default function DashboardView({ data }) {
   ];
   return (
     <>
-      <PageTitle
-        title="Good morning, Alex"
-        eyebrow="Your live commerce overview"
-      >
-        <AssistantPanel />
-      </PageTitle>
       <motion.section
         initial="hidden"
         animate="show"
@@ -71,93 +65,7 @@ export default function DashboardView({ data }) {
           </motion.div>
         ))}
       </motion.section>
-      <section className="mt-5 grid gap-5 xl:grid-cols-3">
-        <div className="card p-5 xl:col-span-2">
-          <h2 className="font-semibold">Revenue overview</h2>
-          <p className="mt-1 text-sm muted">
-            Gross revenue across all channels
-          </p>
-          <div className="mt-5">
-            <RevenueChart />
-          </div>
-        </div>
-        <div className="card p-5">
-          <h2 className="font-semibold">Sales by category</h2>
-          <p className="mt-1 text-sm muted">Live catalog distribution</p>
-          <div className="mt-6 space-y-5">
-            {data.categories.map((x, i) => (
-              <div key={x.id}>
-                <div className="mb-2 flex justify-between text-sm">
-                  <span>{x.name}</span>
-                  <span className="muted">{x.productCount || 0} products</span>
-                </div>
-                <div className="h-2 rounded-full bg-[var(--bg)]">
-                  <div
-                    className={
-                      [
-                        "bg-indigo-500",
-                        "bg-violet-500",
-                        "bg-emerald-500",
-                        "bg-amber-500",
-                      ][i % 4] + " h-2 rounded-full"
-                    }
-                    style={{
-                      width:
-                        Math.max(
-                          8,
-                          (Number(x.productCount || 0) * 100) /
-                            Math.max(1, data.stats.products),
-                        ) + "%",
-                    }}
-                  />
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-      <section className="mt-5 grid gap-5 xl:grid-cols-5">
-        <div className="card overflow-hidden xl:col-span-3">
-          <div className="p-5">
-            <h2 className="font-semibold">Recent orders</h2>
-            <p className="mt-1 text-sm muted">Your latest customer activity</p>
-          </div>
-          <div className="overflow-x-auto">
-            <table className="w-full min-w-[580px] text-left text-sm">
-              <thead className="border-y border-[var(--line)] text-xs uppercase tracking-wide muted">
-                <tr>
-                  <th className="px-5 py-3">Order</th>
-                  <th>Customer</th>
-                  <th>Total</th>
-                  <th className="px-5 py-3">Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {data.orders.slice(0, 4).map((o) => (
-                  <tr key={o.id} className="border-b border-[var(--line)]">
-                    <td className="px-5 py-4 font-semibold">{o.orderNumber}</td>
-                    <td>
-                      <p>{o.customerName}</p>
-                      <p className="text-xs muted">{o.productName}</p>
-                    </td>
-                    <td>${Number(o.total).toFixed(2)}</td>
-                    <td className="px-5">
-                      <Badge type={o.status}>{o.status}</Badge>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-        <div className="card p-5 xl:col-span-2">
-          <h2 className="font-semibold">Store pulse</h2>
-          <p className="mt-1 text-sm muted">Order velocity</p>
-          <div className="mt-5">
-            <SalesChart />
-          </div>
-        </div>
-      </section>
+
       <section className="card mt-5 overflow-hidden">
         <div className="flex items-center justify-between p-5">
           <div>
@@ -217,39 +125,38 @@ export default function DashboardView({ data }) {
           </table>
         </div>
       </section>
-      <section className="mt-5 grid gap-5 lg:grid-cols-3">
-        {" "}
-        <div className="rounded-[18px] bg-gradient-to-br from-indigo-600 to-violet-700 p-5 text-white">
-          <span className="rounded-lg bg-white/15 px-2.5 py-1 text-xs font-semibold">
-            Nexa AI
-          </span>
-          <h2 className="mt-5 text-xl font-bold">A clearer path to growth.</h2>
-          <p className="mt-2 text-sm leading-6 text-indigo-100">
-            Discover your next best action from the patterns in your store.
-          </p>
-          <button className="mt-6 inline-flex items-center gap-2 rounded-xl bg-white px-3.5 py-2.5 text-sm font-semibold text-indigo-700">
-            <Send size={15} /> Start a conversation
-          </button>
-        </div>
-        <div className="card p-5 lg:col-span-2">
-          <h2 className="font-semibold">Top products</h2>
-          <p className="mt-1 text-sm muted">Current catalog leaders</p>
-          <div className="mt-5 grid gap-3 sm:grid-cols-2">
-            {data.products.slice(0, 4).map((p) => (
-              <div
-                className="flex items-center gap-3 rounded-xl border border-[var(--line)] p-3"
-                key={p.id}
-              >
-                <div className="grid h-10 w-10 place-items-center rounded-xl bg-[var(--soft)] text-[var(--primary)]">
-                  <Box size={18} />
-                </div>
-                <div className="min-w-0 flex-1">
-                  <p className="truncate text-sm font-semibold">{p.name}</p>
-                  <p className="text-xs muted">{p.sold} sold</p>
-                </div>
-                <p className="text-sm font-bold">${p.price}</p>
-              </div>
-            ))}
+      <section className="mt-5">
+        <div className="card overflow-hidden xl:col-span-3">
+          <div className="p-5">
+            <h2 className="font-semibold">Recent orders</h2>
+            <p className="mt-1 text-sm muted">Your latest customer activity</p>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[580px] text-left text-sm">
+              <thead className="border-y border-[var(--line)] text-xs uppercase tracking-wide muted">
+                <tr>
+                  <th className="px-5 py-3">Order</th>
+                  <th>Customer</th>
+                  <th>Total</th>
+                  <th className="px-5 py-3">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {data.orders.slice(0, 4).map((o) => (
+                  <tr key={o.id} className="border-b border-[var(--line)]">
+                    <td className="px-5 py-4 font-semibold">{o.orderNumber}</td>
+                    <td>
+                      <p>{o.customerName}</p>
+                      <p className="text-xs muted">{o.productName}</p>
+                    </td>
+                    <td>${Number(o.total).toFixed(2)}</td>
+                    <td className="px-5">
+                      <Badge type={o.status}>{o.status}</Badge>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
       </section>
