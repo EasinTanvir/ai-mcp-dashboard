@@ -1,4 +1,3 @@
-import "server-only";
 import { db } from "./index";
 import { categories, customers, products, orders, reviews } from "./schema";
 import { desc, eq, sql, count } from "drizzle-orm";
