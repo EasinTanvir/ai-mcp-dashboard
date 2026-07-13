@@ -5,11 +5,11 @@ import { Sparkles, X, Send, Package, ShoppingBag } from "lucide-react";
 import { usePathname } from "next/navigation";
 
 const prompts = [
+  "Show me the most recent orders",
+  "Show low stock products",
   "How many products do we have?",
   "How many customers?",
   "How many orders today?",
-  "Show low stock products",
-  "Show me the most recent orders",
 ];
 
 export default function AssistantPanel() {
@@ -53,13 +53,26 @@ export default function AssistantPanel() {
 
   return (
     <>
-      <button
+      <motion.button
         onClick={() => setOpen(true)}
-        className="inline-flex items-center justify-center gap-2 rounded-xl bg-[var(--primary)] px-4 py-2.5 text-sm font-semibold text-white shadow-lg shadow-indigo-500/20"
+        animate={{
+          scale: [1, 1.05, 1],
+          boxShadow: [
+            "0 0 0px rgba(99,102,241,0.4)",
+            "0 0 22px rgba(99,102,241,0.7)",
+            "0 0 0px rgba(99,102,241,0.4)",
+          ],
+        }}
+        transition={{
+          duration: 1.8,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+        className="inline-flex items-center justify-center gap-2 rounded-xl bg-[var(--primary)] px-4 py-2.5 text-sm font-semibold text-white shadow-lg"
       >
         <Sparkles size={16} />
         Ask Nexa AI
-      </button>
+      </motion.button>
       <AnimatePresence>
         {open && (
           <motion.div
