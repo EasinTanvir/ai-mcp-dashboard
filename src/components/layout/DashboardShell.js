@@ -1,8 +1,9 @@
 "use client";
+
 import { useState } from "react";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
-import { LogOut } from "lucide-react";
+import { LogOut, Menu, X } from "lucide-react";
 import { logout } from "@/actions/auth";
 import { nav } from "@/lib/nav";
 
@@ -41,62 +42,81 @@ const DashboardShell = ({ children, active = "Dashboard" }) => {
       </nav>
 
       <form action={logout} className="mt-auto">
-        <button className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-slate-300 transition bg-white/8 hover:text-white">
-          <LogOut size={18} /> Log out
+        <button className="flex w-full items-center gap-3 rounded-xl bg-white/8 px-3 py-2.5 text-sm font-medium text-slate-300 transition hover:text-white">
+          <LogOut size={18} />
+          Log out
         </button>
       </form>
     </aside>
   );
-  return (
-    <div>
-      <div className="min-h-screen bg-[var(--bg)]">
-        <div className="fixed inset-y-0 left-0 z-30 hidden lg:block">
-          {sidebar}
-        </div>
-        <AnimatePresence>
-          {open && (
-            <>
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                onClick={() => setOpen(false)}
-                className="fixed inset-0 z-40 bg-slate-950/45 lg:hidden"
-              />
-              <motion.div
-                initial={{ x: -260 }}
-                animate={{ x: 0 }}
-                exit={{ x: -260 }}
-                className="fixed inset-y-0 left-0 z-50 lg:hidden"
-              >
-                {sidebar}
-              </motion.div>
-            </>
-          )}
-        </AnimatePresence>
-        <header className="sticky top-0 z-20 flex h-[72px] items-center gap-3 border-b border-[var(--line)] bg-[var(--bg)]/85 px-4 backdrop-blur lg:ml-[248px] lg:px-8">
-          <div className="ml-auto flex items-center gap-2">
-            {/* <button
-              className="icon-btn"
-              onClick={() => setDark(!dark)}
-              aria-label="Toggle theme"
-            >
-              {dark ? <Sun size={18} /> : <Moon size={18} />}
-            </button> */}
 
-            <div className="ml-1 flex items-center gap-2 border-l border-[var(--line)] pl-3">
-              <div className="grid h-9 w-9 place-items-center rounded-full bg-gradient-to-br from-amber-200 to-orange-300 text-sm font-bold text-orange-800">
-                AC
+  return (
+    <div className="min-h-screen bg-[var(--bg)]">
+      {/* Desktop Sidebar */}
+      <div className="fixed inset-y-0 left-0 z-30 hidden lg:block">
+        {sidebar}
+      </div>
+
+      {/* Mobile Sidebar */}
+      <AnimatePresence>
+        {open && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setOpen(false)}
+              className="fixed inset-0 z-40 bg-slate-950/45 lg:hidden"
+            />
+
+            <motion.div
+              initial={{ x: -260 }}
+              animate={{ x: 0 }}
+              exit={{ x: -260 }}
+              transition={{ duration: 0.25 }}
+              className="fixed inset-y-0 left-0 z-50 lg:hidden"
+            >
+              <div className="relative h-full">
+                {sidebar}
+
+                {/* Close Button */}
+                <button
+                  onClick={() => setOpen(false)}
+                  className="absolute right-3 top-3 rounded-lg p-2 text-white hover:bg-white/10"
+                >
+                  <X size={20} />
+                </button>
               </div>
-              <div className="hidden sm:block">
-                <p className="text-sm font-semibold">Alex Chen</p>
-                <p className="text-xs muted">Administrator</p>
-              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+
+      {/* Header */}
+      <header className="sticky top-0 z-20 flex h-[72px] items-center gap-3 border-b border-[var(--line)] bg-[var(--bg)]/85 px-4 backdrop-blur lg:ml-[248px] lg:px-8">
+        {/* Mobile Toggle */}
+        <button
+          onClick={() => setOpen((prev) => !prev)}
+          className="rounded-lg p-2 transition hover:bg-white/10 lg:hidden"
+        >
+          <Menu size={22} />
+        </button>
+
+        <div className="ml-auto flex items-center gap-2">
+          <div className="ml-1 flex items-center gap-2 border-l border-[var(--line)] pl-3">
+            <div className="grid h-9 w-9 place-items-center rounded-full bg-gradient-to-br from-amber-200 to-orange-300 text-sm font-bold text-orange-800">
+              D
+            </div>
+            <div className="hidden sm:block">
+              <p className="text-sm font-semibold">Demo</p>
+              <p className="muted text-xs">Administrator</p>
             </div>
           </div>
-        </header>
-        <main className="p-4 sm:p-6 lg:ml-[248px] lg:p-8">{children}</main>
-      </div>
+        </div>
+      </header>
+
+      {/* Content */}
+      <main className="p-4 sm:p-6 lg:ml-[248px] lg:p-8">{children}</main>
     </div>
   );
 };
