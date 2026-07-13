@@ -101,13 +101,13 @@ export default function DashboardShell({ children, active = "Dashboard" }) {
         </AnimatePresence>
         <header className="sticky top-0 z-20 flex h-[72px] items-center gap-3 border-b border-[var(--line)] bg-[var(--bg)]/85 px-4 backdrop-blur lg:ml-[248px] lg:px-8">
           <div className="ml-auto flex items-center gap-2">
-            <button
+            {/* <button
               className="icon-btn"
               onClick={() => setDark(!dark)}
               aria-label="Toggle theme"
             >
               {dark ? <Sun size={18} /> : <Moon size={18} />}
-            </button>
+            </button> */}
 
             <div className="ml-1 flex items-center gap-2 border-l border-[var(--line)] pl-3">
               <div className="grid h-9 w-9 place-items-center rounded-full bg-gradient-to-br from-amber-200 to-orange-300 text-sm font-bold text-orange-800">

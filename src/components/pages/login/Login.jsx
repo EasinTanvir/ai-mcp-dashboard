@@ -4,13 +4,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import { loginAsDemo, loginAsReal } from "@/actions/auth";
-import {
-  Sparkles,
-  ShieldCheck,
-  ArrowRight,
-  KeyRound,
-  Loader2,
-} from "lucide-react";
+import { Loader2, Sparkles } from "lucide-react";
 
 const Login = () => {
   const [loading, setLoading] = useState(false);
@@ -36,92 +30,89 @@ const Login = () => {
         return;
       }
 
-      // Success: redirect() inside the server action will handle navigation.
+      // redirect handled in server action
     } catch (error) {
       console.error(error);
-      //toast.error("Something went wrong. Please try again.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <main className="grid min-h-screen place-items-center overflow-hidden bg-[#101828] p-5">
-      <div className="absolute h-96 w-96 -translate-x-40 -translate-y-40 rounded-full bg-indigo-600/30 blur-3xl" />
-
-      <section className="relative w-full max-w-md rounded-[28px] border border-white/10 bg-slate-900/80 p-7 text-white shadow-2xl backdrop-blur sm:p-9">
-        <div className="grid h-12 w-12 mx-auto place-items-center rounded-2xl bg-gradient-to-br from-indigo-400 to-violet-600">
-          <Sparkles size={22} />
+    <main className="flex min-h-screen items-center justify-center bg-gray-50 px-5">
+      <section className="w-full max-w-md rounded-2xl border border-gray-200 bg-white p-8 shadow-xl">
+        {/* Logo */}
+        <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-gray-900 text-white">
+          <Sparkles size={20} />
         </div>
 
-        <p className="mt-8 text-sm font-semibold text-indigo-300">
-          Nexa workspace
-        </p>
-
-        <h1 className="mt-2 text-3xl font-bold !text-white"> Welcome back.</h1>
+        {/* Heading */}
+        <div className="mt-6 text-center">
+          <p className="mt-2 text-sm text-gray-500">
+            Sign in to access your dashboard.
+          </p>
+        </div>
 
         {/* Demo Login */}
-        <div className="mt-7 rounded-2xl border border-white/10 bg-white/5 p-4">
-          <div className="flex items-center gap-3">
-            <div>
-              <p className="text-sm font-semibold">Demo Admin</p>
-
-              <p className="mt-0.5 text-xs text-slate-400">
-                Read-only portfolio access
-              </p>
-            </div>
-          </div>
-
+        <div className="mt-8 rounded-xl border border-gray-200 bg-gray-50 p-4">
           <form action={loginAsDemo}>
             <button
               type="submit"
-              className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-white px-4 py-3 text-sm font-semibold text-slate-900 transition hover:bg-indigo-50"
+              className="mt-4 w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 transition hover:bg-gray-100"
             >
               Login as Demo Admin
             </button>
           </form>
         </div>
 
-        {/* Real Admin Login */}
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-3 pt-6">
-          <label className="block text-xs font-medium !text-slate-300">
-            Email
+        {/* Real Login */}
+        <form onSubmit={handleSubmit(onSubmit)} className="mt-8 space-y-5">
+          <div>
+            <label className="mb-2 block text-sm font-medium text-gray-700">
+              Email
+            </label>
+
             <input
               type="email"
               placeholder="admin@nexa.local"
-              className="mt-1.5 w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2.5 text-sm outline-none placeholder:text-slate-600 focus:border-indigo-400"
+              className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm text-gray-900 placeholder:text-gray-400 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
               {...register("email", {
                 required: "Email is required",
               })}
             />
+
             {errors.email && (
-              <p className="mt-1 text-xs text-red-400">
-                {errors.email.message}
+              <p className="mt-1 text-xs text-red-500">
+                {String(errors.email.message)}
               </p>
             )}
-          </label>
+          </div>
 
-          <label className="block text-xs font-medium !text-slate-300">
-            Password
+          <div>
+            <label className="mb-2 block text-sm font-medium text-gray-700">
+              Password
+            </label>
+
             <input
               type="password"
               placeholder="••••••••"
-              className="mt-1.5 w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2.5 text-sm outline-none placeholder:text-slate-600 focus:border-indigo-400"
+              className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm text-gray-900 placeholder:text-gray-400 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
               {...register("password", {
                 required: "Password is required",
               })}
             />
+
             {errors.password && (
-              <p className="mt-1 text-xs text-red-400">
-                {errors.password.message}
+              <p className="mt-1 text-xs text-red-500">
+                {String(errors.password.message)}
               </p>
             )}
-          </label>
+          </div>
 
           <button
             type="submit"
             disabled={loading}
-            className="flex w-full items-center justify-center gap-2 rounded-xl border border-white/15 px-4 py-3 text-sm font-semibold transition hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-60"
+            className="flex w-full items-center justify-center gap-2 rounded-lg bg-gray-900 px-4 py-3 text-sm font-medium text-white transition hover:bg-gray-800 disabled:cursor-not-allowed disabled:opacity-60"
           >
             {loading ? (
               <>
@@ -129,7 +120,7 @@ const Login = () => {
                 Signing in...
               </>
             ) : (
-              <>Login</>
+              "Login"
             )}
           </button>
         </form>
