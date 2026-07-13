@@ -2,15 +2,15 @@ import DashboardShell from "@/components/layout/DashboardShell";
 import { ManagementView } from "@/components/pages/ManagementView";
 import { getManagementData } from "@/db/queries";
 import { requireAdmin } from "@/lib/auth";
-export default async function Page() {
+
+const CustomerPage = async () => {
   const admin = await requireAdmin();
+  const data = await getManagementData("categories");
   return (
     <DashboardShell active="Categories">
-      <ManagementView
-        type="Categories"
-        data={await getManagementData("categories")}
-        role={admin.role}
-      />
+      <ManagementView type="Categories" data={data} role={admin.role} />
     </DashboardShell>
   );
-}
+};
+
+export default CustomerPage;

@@ -2,35 +2,13 @@
 import { useState } from "react";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
-import {
-  LayoutDashboard,
-  Package,
-  Tags,
-  ShoppingBag,
-  Users,
-  ChartNoAxesCombined,
-  Star,
-  Menu,
-  X,
-  Bell,
-  Sun,
-  Moon,
-  Search,
-  Command,
-  LogOut,
-} from "lucide-react";
+import { LogOut } from "lucide-react";
 import { logout } from "@/actions/auth";
-const nav = [
-  ["Dashboard", "/", LayoutDashboard],
-  ["Products", "/products", Package],
-  ["Categories", "/categories", Tags],
-  ["Orders", "/orders", ShoppingBag],
-  ["Customers", "/customers", Users],
-  ["Analytics", "/analytics", ChartNoAxesCombined],
-];
-export default function DashboardShell({ children, active = "Dashboard" }) {
-  const [open, setOpen] = useState(false),
-    [dark, setDark] = useState(false);
+import { nav } from "@/lib/nav";
+
+const DashboardShell = ({ children, active = "Dashboard" }) => {
+  const [open, setOpen] = useState(false);
+
   const sidebar = (
     <aside className="flex h-full w-[248px] flex-col bg-[var(--sidebar)] px-4 py-6 text-slate-300">
       <div className="mb-10 flex items-center gap-3 px-2 text-white">
@@ -70,7 +48,7 @@ export default function DashboardShell({ children, active = "Dashboard" }) {
     </aside>
   );
   return (
-    <div className={dark ? "dark" : ""}>
+    <div>
       <div className="min-h-screen bg-[var(--bg)]">
         <div className="fixed inset-y-0 left-0 z-30 hidden lg:block">
           {sidebar}
@@ -121,4 +99,6 @@ export default function DashboardShell({ children, active = "Dashboard" }) {
       </div>
     </div>
   );
-}
+};
+
+export default DashboardShell;

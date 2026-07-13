@@ -3,7 +3,7 @@ import DashboardView from "@/components/dashboard/DashboardView";
 import { getDashboardData } from "@/db/queries";
 import { requireAdmin } from "@/lib/auth";
 
-export default async function Home() {
+const Home = async () => {
   await requireAdmin();
   const data = await getDashboardData();
   return (
@@ -11,4 +11,6 @@ export default async function Home() {
       <DashboardView data={data} />
     </DashboardShell>
   );
-}
+};
+
+export default Home;

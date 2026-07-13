@@ -1,11 +1,13 @@
 import { Toaster } from "react-hot-toast";
 import "./globals.css";
 import AssistantPanel from "@/components/dashboard/AssistantPanel";
+
 export const metadata = {
-  title: "Nexa - Commerce Intelligence",
+  title: "Nexa Commerce",
   description: "Premium commerce dashboard UI",
 };
-export default function RootLayout({ children }) {
+
+const RootLayout = ({ children }) => {
   return (
     <html lang="en">
       <body>
@@ -17,4 +19,5 @@ export default function RootLayout({ children }) {
       </body>
     </html>
   );
-}
+};
+export default RootLayout;
