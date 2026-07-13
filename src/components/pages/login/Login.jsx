@@ -5,10 +5,12 @@ import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import { loginAsDemo, loginAsReal } from "@/actions/auth";
 import { Loader2, Sparkles } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 const Login = () => {
   const [loading, setLoading] = useState(false);
-
+  const [demoLoading, setDemoLoading] = useState(false);
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -32,9 +34,24 @@ const Login = () => {
 
       // redirect handled in server action
     } catch (error) {
+      toast.error(result.error);
       console.error(error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const onDemoSubmit = async () => {
+    setDemoLoading(true);
+
+    try {
+      await loginAsDemo();
+      router.push("/");
+    } catch (error) {
+      console.error(error);
+      toast.error("An error occurred while logging in as demo admin.");
+    } finally {
+      setDemoLoading(false);
     }
   };
 
@@ -55,14 +72,14 @@ const Login = () => {
 
         {/* Demo Login */}
         <div className="mt-8 rounded-xl border border-gray-200 bg-gray-50 p-4">
-          <form action={loginAsDemo}>
-            <button
-              type="submit"
-              className="mt-4 w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 transition hover:bg-gray-100"
-            >
-              Login as Demo Admin
-            </button>
-          </form>
+          <button
+            disabled={demoLoading}
+            onClick={onDemoSubmit}
+            type="submit"
+            className="mt-4 w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 transition hover:bg-gray-100"
+          >
+            {demoLoading ? "Logging in..." : "Login as Demo Admins"}
+          </button>
         </div>
 
         {/* Real Login */}

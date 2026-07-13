@@ -20,12 +20,15 @@ export async function loginAsDemo() {
   const admin = await db.query.admins.findFirst({
     where: eq(admins.role, "demo"),
   });
-  if (!admin)
+  if (!admin) {
+    console.error("Demo administrator is unavailable. Run the database seed.");
     throw new Error(
       "Demo administrator is unavailable. Run the database seed.",
     );
+  }
+
   await setSession(admin);
-  redirect("/");
+  //redirect("/");
 }
 export async function loginAsReal(formData) {
   console.log("formData", formData);
@@ -45,7 +48,6 @@ export async function loginAsReal(formData) {
   )
     return { error: "Invalid administrator credentials." };
   await setSession(admin);
-  redirect("/");
 }
 export async function logout() {
   const store = await cookies();
