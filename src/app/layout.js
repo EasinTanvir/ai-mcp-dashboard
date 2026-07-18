@@ -1,10 +1,9 @@
 import { Toaster } from "react-hot-toast";
 import "./globals.css";
-
 import AssistantPanel from "@/components/dashboard/AssistantPanel";
 
 export const metadata = {
-  title: "Nexa Commerce",
+  title: "Nexa Commerce Shop",
   description: "Premium commerce dashboard UI",
 };
 
