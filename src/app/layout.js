@@ -1,5 +1,6 @@
 import { Toaster } from "react-hot-toast";
 import "./globals.css";
+
 import AssistantPanel from "@/components/dashboard/AssistantPanel";
 
 export const metadata = {
